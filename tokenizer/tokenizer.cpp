@@ -7,7 +7,7 @@ Tokenizer::Tokenizer::Tokenizer()
 		Sapphire::sappOperator.begin(),
 		Sapphire::sappOperator.end(),
 		std::back_inserter(symbolsOperator),
-		[](Sapphire::Operator op) -> char8_t { return op.name; });
+		[](Sapphire::Operator op) -> std::u8string_view { return op.name; });
 
 	std::transform(
 		Sapphire::sappPrimitiveType.begin(),
@@ -54,7 +54,7 @@ std::pair<std::u8string_view, Tokenizer::TokenType> Tokenizer::Tokenizer::Tokeni
 {
 
 	{ //Operator
-		std::u8string_view r = TryTokenizeSymbol(str, symbolsOperator); //Check for operator sign
+		std::u8string_view r = TryTokenizeWord(str, symbolsOperator); //Check for operator sign
 		if (r.length() == 1)
 			return std::make_pair(r, TokenType::TOKEN_OPERATOR);
 	}
@@ -122,6 +122,21 @@ std::pair<std::u8string_view, Tokenizer::TokenType> Tokenizer::Tokenizer::Tokeni
 	{
 		std::u8string_view r = TokenizeSymbol(str);
 		return std::make_pair(r, TokenType::TOKEN_BLOCKEND);
+	}
+	case u8'(': 
+	{
+		std::u8string_view r = TokenizeSymbol(str);
+		return std::make_pair(r, TokenType::TOKEN_LPAR);
+	}
+	case u8')':
+	{
+		std::u8string_view r = TokenizeSymbol(str);
+		return std::make_pair(r, TokenType::TOKEN_RPAR);
+	}
+	case u8',':
+	{
+		std::u8string_view r = TokenizeSymbol(str);
+		return std::make_pair(r, TokenType::TOKEN_COMMA);
 	}
 	}
 

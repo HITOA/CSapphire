@@ -19,7 +19,7 @@ namespace Tokenizer
 
 		std::pair<std::u8string_view, TokenType> Tokenize(const std::u8string_view& str);
 	private:
-		std::vector<char8_t> symbolsOperator;
+		std::vector<std::u8string_view> symbolsOperator;
 		std::vector<std::u8string_view> primitiveType;
 		std::vector<std::u8string_view> keyword;
 	};

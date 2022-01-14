@@ -7,10 +7,27 @@
 
 void SapphireCompiler::Compile(const Options& options, std::u8string_view src)
 {
-	Tokenizer::Tokenizer::Consumer consumer = tokenizer.TokenizeAndGetConsumer(src);
+	auto tokens = tokenizer.TokenizeAll(src);
 
-	if (consumer.GetSize() < 1)
+	if (tokens.size() < 1)
 		throw std::runtime_error("Input file empty");
+
+	for (int i = 0; i < tokens.size(); i++) {
+		switch (tokens[i].second) {
+		case Tokenizer::TokenType::TOKEN_WHITESPACE: {
+			tokens.erase(tokens.begin() + i);
+			i--;
+			break;
+		}
+		case Tokenizer::TokenType::TOKEN_NEWLINE: {
+			tokens.erase(tokens.begin() + i);
+			i--;
+			break;
+		}
+		}
+	}
+
+	Tokenizer::Tokenizer::Consumer consumer{ tokens };
 
 	if (options.TokenFile()) {
 		std::u8string tokenFile = TokenFile::Produce(consumer, src);

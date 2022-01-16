@@ -18,6 +18,7 @@ namespace Tokenizer
 		std::u8string_view TokenizeComment(const StringType& str);
 
 		std::pair<std::u8string_view, TokenType> Tokenize(const std::u8string_view& str);
+		std::pair<std::u8string_view, TokenType> GetEOF();
 	private:
 		std::vector<std::u8string_view> symbolsOperator;
 		std::vector<std::u8string_view> primitiveType;

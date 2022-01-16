@@ -1,5 +1,6 @@
 #pragma once
 #include <array>
+#include <enum.h>
 
 namespace Sapphire {
 	struct Type {
@@ -11,7 +12,7 @@ namespace Sapphire {
 		const int sbit;
 	};
 
-	std::array<Type, 11> sappPrimitiveType{
+	static std::array<Type, 11> sappPrimitiveType{
 		Type{ u8"i8", 1 },
 		Type{ u8"i16", 2 },
 		Type{ u8"i32", 4 },
@@ -26,5 +27,22 @@ namespace Sapphire {
 		Type{ u8"f64", 8 },
 
 		Type{ u8"bool", 1 }
+	};
+
+	enum class PrimitiveType {
+		I8,
+		I16,
+		I32,
+		I64,
+
+		BYTE,
+		U16,
+		U32,
+		U64,
+
+		F32,
+		F64,
+
+		BOOL
 	};
 }

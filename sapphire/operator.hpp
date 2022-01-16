@@ -1,5 +1,7 @@
 #pragma once
 #include <array>
+#include <enum.h>
+
 
 namespace Sapphire {
 
@@ -11,7 +13,7 @@ namespace Sapphire {
 		const int precedence;
 	};
 
-	std::array<Operator, 23> sappOperator{
+	static std::array<Operator, 23> sappOperator{
 	Operator{ u8"!", 0 },
 	Operator{ u8"~", 0 },
 	Operator{ u8"+", 0 }, //Unary
@@ -44,4 +46,30 @@ namespace Sapphire {
 
 	Operator{ u8"=", 8 }
 	};
+
+	BETTER_ENUM(OperatorType, uint8_t,
+		NOT,
+		COMPLEMENT,
+		UNARY_PLUS,
+		UNARY_MINUS,
+		MULTIPLY,
+		DIVIDE,
+		MODULO,
+		BINARY_PLUS,
+		BINARY_MINUS,
+		BTW_RIGHT_SHIFT,
+		BTW_LEFT_SHIFT,
+		BTW_AND,
+		BTW_XOR,
+		BTW_OR,
+		LESS_EQUAL,
+		LESS,
+		GREATER,
+		GREATER_EQUAL,
+		EQUAL,
+		NOT_EQUAL,
+		AND,
+		OR,
+		ASSIGNEMENT
+	)
 }

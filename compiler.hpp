@@ -1,5 +1,6 @@
 #pragma once
 #include "tokenizer/tokenizer.hpp"
+#include "parser/parser.hpp"
 #include "options.hpp"
 
 class SapphireCompiler {
@@ -10,4 +11,5 @@ public:
 	void Compile(const Options& options, std::u8string_view src);
 private:
 	Tokenizer::Tokenizer tokenizer;
+	Parser::Parser parser;
 };

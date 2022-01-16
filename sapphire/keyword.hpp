@@ -10,7 +10,7 @@ namespace Sapphire {
 		const char8_t* name;
 	};
 
-	std::array<Keyword, 10> sappKeyword{
+	static std::array<Keyword, 8> sappKeyword{
 		Keyword{u8"true"},
 		Keyword{u8"false"},
 
@@ -20,8 +20,6 @@ namespace Sapphire {
 		Keyword{u8"for"},
 		Keyword{u8"while"},
 
-		Keyword{u8"func"},
-		Keyword{u8"class"},
-		Keyword{u8"struct"}
+		Keyword{u8"return"},
 	};
 }

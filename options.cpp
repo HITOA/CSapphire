@@ -60,7 +60,8 @@ void Options::Init()
 		("utf16", bpo::bool_switch(&u16encoding)->default_value(false), "Read input file with u16 encoding")
 		("utf32", bpo::bool_switch(&u32encoding)->default_value(false), "Read input file with u32 encoding")
 		("input,i", bpo::value<std::string>(&inputFile), "Specify input file")
-		("tokenfile", bpo::bool_switch(&tokenfile)->default_value(false), "Produce token file");
+		("tokenfile", bpo::bool_switch(&tokenfile)->default_value(false), "Produce token file")
+		("astfile", bpo::bool_switch(&astfile)->default_value(false), "Produce text file with ast representation after parsing");
 
 	desc.add(options);
 }

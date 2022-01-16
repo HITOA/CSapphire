@@ -31,6 +31,7 @@ public:
 	inline Encoding GetEncoding() const { return u8encoding ? Encoding::utf8 : u16encoding ? Encoding::utf16 : Encoding::utf32; }
 	inline std::string GetInputFile() const { return inputFile; }
 	inline bool TokenFile() const { return tokenfile; }
+	inline bool AstFile() const { return astfile; }
 public:
 	bool Parse(int argc, const char* argv[]);
 private:
@@ -43,4 +44,5 @@ private:
 	bool u32encoding;
 	std::string inputFile;
 	bool tokenfile;
+	bool astfile;
 };

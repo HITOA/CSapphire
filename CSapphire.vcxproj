@@ -167,7 +167,22 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ast\ast.hpp" />
+    <ClInclude Include="ast\astnode.hpp" />
+    <ClInclude Include="ast\asttype.hpp" />
+    <ClInclude Include="ast\expression.hpp" />
+    <ClInclude Include="ast\expression\literal.hpp" />
+    <ClInclude Include="ast\program.hpp" />
+    <ClInclude Include="ast\statement.hpp" />
+    <ClInclude Include="ast\statementblock.hpp" />
+    <ClInclude Include="ast\statement\varasgn.hpp" />
+    <ClInclude Include="ast\statement\vardecl.hpp" />
+    <ClInclude Include="ast\statement\vardeclasgn.h" />
+    <ClInclude Include="ast\type\primitive.hpp" />
+    <ClInclude Include="ast\visitor.hpp" />
     <ClInclude Include="compiler.hpp" />
+    <ClInclude Include="parser\parser.hpp" />
+    <ClInclude Include="parser\parserexcept.hpp" />
     <ClInclude Include="sapphire\definition.hpp" />
     <ClInclude Include="sapphire\keyword.hpp" />
     <ClInclude Include="sapphire\operator.hpp" />
@@ -176,6 +191,7 @@
     <ClInclude Include="tokenizer\tokenizer.hpp" />
     <ClInclude Include="tokenizer\tokentype.hpp" />
     <ClInclude Include="options.hpp" />
+    <ClInclude Include="utilities\astfile.hpp" />
     <ClInclude Include="utilities\filesystem.hpp" />
     <ClInclude Include="utilities\tokenfile.hpp" />
     <ClInclude Include="versioninfo.h" />
@@ -184,7 +200,9 @@
     <ClCompile Include="compiler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="options.cpp" />
+    <ClCompile Include="parser\parser.cpp" />
     <ClCompile Include="tokenizer\tokenizer.cpp" />
+    <ClCompile Include="utilities\astfile.cpp" />
     <ClCompile Include="utilities\tokenfile.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

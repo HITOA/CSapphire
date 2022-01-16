@@ -25,7 +25,7 @@ Tokenizer::Tokenizer::Tokenizer()
 std::u8string_view Tokenizer::Tokenizer::TokenizeWord(const std::u8string_view& str)
 {
 	int size = 0;
-	while (std::isalnum(str[size]) || str[size] == u8'_')
+	while (size < str.size() && (std::isalnum(str[size]) || str[size] == u8'_'))
 		size++;
 	return str.substr(0, size);
 }
@@ -103,6 +103,11 @@ std::pair<std::u8string_view, Tokenizer::TokenType> Tokenizer::Tokenizer::Tokeni
 		std::u8string_view r = TokenizeSymbol(str);
 		return std::make_pair(r, TokenType::TOKEN_NEWLINE);
 	}
+	case u8';':
+	{
+		std::u8string_view r = TokenizeSymbol(str);
+		return std::make_pair(r, TokenType::TOKEN_SEMICOLON);
+	}
 	case u8' ':
 	{
 		std::u8string_view r = TokenizeSymbol(str);
@@ -141,4 +146,8 @@ std::pair<std::u8string_view, Tokenizer::TokenType> Tokenizer::Tokenizer::Tokeni
 	}
 
 	return std::make_pair(str.substr(0, 1), TokenType::TOKEN_BAD);
+}
+
+std::pair<std::u8string_view, Tokenizer::TokenType> Tokenizer::Tokenizer::GetEOF() {
+	return std::make_pair(std::u8string_view{}, TokenType::TOKEN_EOF);
 }

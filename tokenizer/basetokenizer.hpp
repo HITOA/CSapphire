@@ -21,7 +21,11 @@ namespace Tokenizer
 			Consumer() = default;
 			Consumer(const Consumer& consumer) : tokens{ consumer.tokens } {};
 			Consumer(std::vector<TokenType> tokens) : tokens{ tokens } {};
-			Consumer& operator=(const Consumer& consumer) { tokens = consumer.tokens; };
+			Consumer& operator=(const Consumer& consumer) 
+			{ 
+				tokens = consumer.tokens; 
+				return *this;
+			};
 			~Consumer() { tokens.clear(); };
 		public:
 			const TokenType& Peek() const
@@ -38,8 +42,7 @@ namespace Tokenizer
 
 			TokenType Consume()
 			{
-				if (tokens.size() == 0)
-					return TokenType{};
+				assert(("index out of bound", tokens.size() > 0));
 				TokenType token = tokens[0];
 				tokens.erase(tokens.begin());
 				return token;
@@ -47,8 +50,7 @@ namespace Tokenizer
 
 			TokenType Consume(int n)
 			{
-				if (tokens.size() <= n)
-					return TokenType{};
+				assert(("index out of bound", n < tokens.size()));
 				TokenType token = tokens[n];
 				tokens.erase(tokens.begin() + n);
 				return token;
@@ -63,6 +65,7 @@ namespace Tokenizer
 		};
 	public:
 		virtual std::pair<StringType, DataType> Tokenize(const StringType&) = 0;
+		virtual std::pair<StringType, DataType> GetEOF() = 0;
 
 		std::vector<std::pair<StringType, DataType>> TokenizeAll(StringType str)
 		{
@@ -78,6 +81,8 @@ namespace Tokenizer
 				tokens.push_back(r);
 				i += r.first.length();
 			}
+
+			tokens.push_back(GetEOF());
 
 			return tokens;
 		}

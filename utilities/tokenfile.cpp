@@ -46,7 +46,7 @@ std::u8string TokenFile::Produce(const Tokenizer::Tokenizer::Consumer& consumer,
 {
 	std::u8string output{};
 
-	for (int i = 0; i < consumer.GetSize(); i++) 
+	for (int i = 0; i < consumer.GetSize() - 1; i++) 
 	{
 		std::u8string line{};
 		std::u8string_view tokenContent = consumer.Peek(i).first;

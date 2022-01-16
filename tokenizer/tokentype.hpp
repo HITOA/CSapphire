@@ -18,5 +18,7 @@ namespace Tokenizer {
 		TOKEN_RPAR,
 		TOKEN_LPAR,
 		TOKEN_COMMA,
+		TOKEN_SEMICOLON,
+		TOKEN_EOF,
 		TOKEN_BAD)
 }

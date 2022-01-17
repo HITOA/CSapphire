@@ -10,6 +10,7 @@ namespace Parser {
 		~Parser() {}
 	public:
 		void SetConsumer(Tokenizer::Tokenizer::Consumer& consumer);
+		void SetSource(std::u8string_view source);
 	public:
 		std::shared_ptr<AST::ASTProgram> ParseProgram();
 	private:
@@ -39,5 +40,6 @@ namespace Parser {
 		int TryParseVarAsgn();
 	private:
 		Tokenizer::Tokenizer::Consumer consumer;
+		std::u8string_view source;
 	};
 }

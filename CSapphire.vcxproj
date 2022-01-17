@@ -195,6 +195,7 @@
     <ClInclude Include="utilities\astfile.hpp" />
     <ClInclude Include="utilities\filesystem.hpp" />
     <ClInclude Include="utilities\tokenfile.hpp" />
+    <ClInclude Include="utilities\u8stringhelper.hpp" />
     <ClInclude Include="versioninfo.h" />
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +206,7 @@
     <ClCompile Include="tokenizer\tokenizer.cpp" />
     <ClCompile Include="utilities\astfile.cpp" />
     <ClCompile Include="utilities\tokenfile.cpp" />
+    <ClCompile Include="utilities\u8stringhelper.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

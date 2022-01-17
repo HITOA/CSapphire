@@ -6,6 +6,11 @@ void Parser::Parser::SetConsumer(Tokenizer::Tokenizer::Consumer& consumer)
 	this->consumer = consumer;
 }
 
+void Parser::Parser::SetSource(std::u8string_view source)
+{
+	this->source = source;
+}
+
 std::shared_ptr<AST::ASTProgram> Parser::Parser::ParseProgram()
 {
 	return std::shared_ptr<AST::ASTProgram>{new AST::ASTProgram{ParseStatementBlock()}};
@@ -48,7 +53,7 @@ std::shared_ptr<AST::ASTStatement> Parser::Parser::ParseStatement()
 	}
 	}
 
-	throw ParserException{ ParserExceptionType::BAD_TOKEN, token };
+	throw ParserException{ ParserExceptionType::BAD_TOKEN, token, source};
 }
 
 std::shared_ptr<AST::ASTStatementBlock> Parser::Parser::ParseStatementBlock()
@@ -77,7 +82,7 @@ std::shared_ptr<AST::ASTType> Parser::Parser::ParseType()
 	if (type.second._value == Tokenizer::TokenType::TOKEN_PRIMITIVE_TYPE)
 		return ParsePrimitiveType();
 
-	throw ParserException{ ParserExceptionType::BAD_TYPE, type };
+	throw ParserException{ ParserExceptionType::BAD_TYPE, type , source };
 }
 
 std::shared_ptr<AST::ASTExpression> Parser::Parser::ParseParenExpr()
@@ -85,7 +90,7 @@ std::shared_ptr<AST::ASTExpression> Parser::Parser::ParseParenExpr()
 	consumer.Consume(); //Consume (
 	std::shared_ptr<AST::ASTExpression> expr = ParseExpression();
 	if (consumer.Peek().second._value != Tokenizer::TokenType::TOKEN_RPAR)
-		throw ParserException{ ParserExceptionType::BAD_TOKEN, consumer.Peek(), "RPar missing."};
+		throw ParserException{ ParserExceptionType::BAD_TOKEN, consumer.Peek(), source, "RPar missing."};
 	consumer.Consume(); //Consume )
 	return expr;
 }
@@ -103,7 +108,7 @@ std::shared_ptr<AST::ASTExpression> Parser::Parser::ParsePrimaryExpr()
 	case Tokenizer::TokenType::TOKEN_STRING:
 		return ParseLiteral();
 	default:
-		throw ParserException{ ParserExceptionType::BAD_TOKEN, token, "Unrocognized Primary Expression."};
+		throw ParserException{ ParserExceptionType::BAD_TOKEN, token, source, "Unrocognized Primary Expression."};
 	}
 }
 
@@ -137,7 +142,7 @@ std::shared_ptr<AST::ASTPrimitive> Parser::Parser::ParsePrimitiveType()
 	if (primitive.first == u8"bool")
 		return std::shared_ptr<AST::ASTPrimitive>{ new AST::ASTPrimitive{ Sapphire::PrimitiveType::BOOL } };
 
-	throw ParserException{ ParserExceptionType::BAD_TYPE, primitive };
+	throw ParserException{ ParserExceptionType::BAD_TYPE, primitive, source };
 }
 
 std::shared_ptr<AST::ASTExpression> Parser::Parser::ParseBinaryOp(int ExprPrec, std::shared_ptr<AST::ASTExpression> lhs)
@@ -185,7 +190,7 @@ std::shared_ptr<AST::ASTVarAsgn> Parser::Parser::ParseVarAsgn()
 	std::shared_ptr<AST::ASTExpression> value = ParseExpression();
 
 	if (!IsTerminator(0))
-		throw ParserException{ ParserExceptionType::TERMINATOR_MISSING, consumer.Peek() };
+		throw ParserException{ ParserExceptionType::TERMINATOR_MISSING, consumer.Peek(), source };
 	consumer.Consume();
 	return std::shared_ptr<AST::ASTVarAsgn>{ new AST::ASTVarAsgn{ identifier, value } };
 }

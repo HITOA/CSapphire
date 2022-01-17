@@ -1,7 +1,9 @@
 #pragma once
 #include "../tokenizer/tokenizer.hpp"
+#include "../utilities/u8stringhelper.hpp"
 #include <stdexcept>
 #include <enum.h>
+#include <iostream>
 
 namespace Parser {
 	BETTER_ENUM(ParserExceptionType, uint8_t, 
@@ -11,14 +13,22 @@ namespace Parser {
 
 	class ParserException : public std::exception {
 	public:
-		ParserException(ParserExceptionType type, Tokenizer::Tokenizer::Consumer::TokenType token) : type{ type }, token{ token } 
+		ParserException(ParserExceptionType type, Tokenizer::Tokenizer::Consumer::TokenType token, std::u8string_view src) : type{ type }, token{ token } 
 		{
-			fullmsg += "Error: ";
+			int offset = token.second._value == Tokenizer::TokenType::TOKEN_EOF ? 1 : 0;
+			auto pos = Index2Pos(src, src.size() - (token.first.size() + offset));
+			fullmsg += "<" + std::to_string(pos.first);
+			fullmsg += ", " + std::to_string(pos.second);
+			fullmsg += "> : ";
 			fullmsg += type._to_string();
 		}
-		ParserException(ParserExceptionType type, Tokenizer::Tokenizer::Consumer::TokenType token, std::string msg) : type{ type }, token{ token }
+		ParserException(ParserExceptionType type, Tokenizer::Tokenizer::Consumer::TokenType token, std::u8string_view src, std::string msg) : type{ type }, token{ token }
 		{
-			fullmsg += "Error: ";
+			int offset = token.second._value == Tokenizer::TokenType::TOKEN_EOF ? 1 : 0;
+			auto pos = Index2Pos(src, src.size() - (token.first.size() + offset));
+			fullmsg += "<" + std::to_string(pos.first);
+			fullmsg += ", " + std::to_string(pos.second);
+			fullmsg += "> : ";
 			fullmsg += type._to_string();
 			fullmsg += ", ";
 			fullmsg += msg;

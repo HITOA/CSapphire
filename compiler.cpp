@@ -38,6 +38,7 @@ void SapphireCompiler::Compile(const Options& options, std::u8string_view src)
 	}
 
 	parser.SetConsumer(consumer);
+	parser.SetSource(src);
 	
 	std::shared_ptr<AST::ASTProgram> program = parser.ParseProgram();
 

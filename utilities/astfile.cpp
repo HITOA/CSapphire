@@ -60,6 +60,22 @@ void AstFile::ASTViewer::Visit_StatementBlock(const AST::ASTStatementBlock* node
 	rstack.push(r);
 }
 
+void AstFile::ASTViewer::Visit_BinaryOp(const AST::ASTBinaryOp* node)
+{
+	std::u8string r = u8"Binary Operation:";
+	r += u8"\n\tlhs: \n";
+	node->GetLhs().get()->Accept(this);
+	r += IndentStr(IndentStr(rstack.top()));
+	rstack.pop();
+	r += u8"\n\trhs: \n";
+	node->GetRhs().get()->Accept(this);
+	r += IndentStr(IndentStr(rstack.top()));
+	rstack.pop();
+	r += u8"\n\toperator: ";
+	r += node->GetOperator().name;
+	rstack.push(r);
+}
+
 void AstFile::ASTViewer::Visit_Literal(const AST::ASTLiteral* node)
 {
 	std::u8string r = u8"Literal: \n";
@@ -89,9 +105,7 @@ void AstFile::ASTViewer::Visit_VarAsgn(const AST::ASTVarAsgn* node)
 	std::u8string r = u8"VarAsgn: \n";
 	r += u8"\tidentifier: ";
 	r += node->GetIdentifier();
-	r += u8"\n\toperator: ";
-	r += (const char8_t*)node->GetOperator()._to_string();
-	r += u8"\n\tvalue: ";
+	r += u8"\n\tvalue: \n";
 	node->GetValue().get()->Accept(this);
 	r += IndentStr(IndentStr(rstack.top()));
 	rstack.pop();

@@ -1,4 +1,5 @@
 #pragma once
+#include <stdexcept>
 
 namespace AST {
 #pragma region astdeclaration
@@ -7,6 +8,7 @@ namespace AST {
 	class ASTStatementBlock;
 
 	class ASTLiteral;
+	class ASTBinaryOp;
 
 	class ASTVarDecl;
 	class ASTVarAsgn;
@@ -17,16 +19,17 @@ namespace AST {
 
 	class ASTVisitor {
 	public:
-		virtual void Visit_Program(const ASTProgram* node) = 0;
+		virtual void Visit_Program(const ASTProgram* node) { throw std::logic_error{ "Not implemented." }; };
 
-		virtual void Visit_StatementBlock(const ASTStatementBlock* node) = 0;
+		virtual void Visit_StatementBlock(const ASTStatementBlock* node) { throw std::logic_error{ "Not implemented." }; };
 
-		virtual void Visit_Literal(const ASTLiteral* node) = 0;
+		virtual void Visit_Literal(const ASTLiteral* node) { throw std::logic_error{ "Not implemented." }; };
+		virtual void Visit_BinaryOp(const ASTBinaryOp* node) { throw std::logic_error{ "Not implemented." }; };
 
-		virtual void Visit_VarDecl(const ASTVarDecl* node) = 0;
-		virtual void Visit_VarAsgn(const ASTVarAsgn* node) = 0;
-		virtual void Visit_VarDeclAsgn(const ASTVarDeclAsgn* node) = 0;
+		virtual void Visit_VarDecl(const ASTVarDecl* node) { throw std::logic_error{ "Not implemented." }; };
+		virtual void Visit_VarAsgn(const ASTVarAsgn* node) { throw std::logic_error{ "Not implemented." }; };
+		virtual void Visit_VarDeclAsgn(const ASTVarDeclAsgn* node) { throw std::logic_error{ "Not implemented." }; };
 
-		virtual void Visit_Primitive(const ASTPrimitive* node) = 0;
+		virtual void Visit_Primitive(const ASTPrimitive* node) { throw std::logic_error{ "Not implemented." }; };
 	};
 }

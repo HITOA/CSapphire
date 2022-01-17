@@ -4,6 +4,7 @@
 #include "statement/vardeclasgn.h"
 
 #include "expression/literal.hpp"
+#include "expression/binaryop.hpp"
 
 #include "type/primitive.hpp"
 

@@ -131,7 +131,7 @@ namespace Tokenizer
 		StringType TryTokenizeWord(const StringType& str, std::vector<StringType> words)
 		{
 			for (const StringType& word : words)
-				if (str.length() >= word.length() && str.substr(0, word.length()) == word)
+				if (str.length() >= word.length() && word == str.substr(0, word.length()))
 					return str.substr(0, word.length());
 			return StringType{};
 		}

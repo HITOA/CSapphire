@@ -11,6 +11,7 @@ namespace AstFile {
 
 		void Visit_StatementBlock(const AST::ASTStatementBlock* node);
 
+		void Visit_BinaryOp(const AST::ASTBinaryOp* node);
 		void Visit_Literal(const AST::ASTLiteral* node);
 
 		void Visit_VarDecl(const AST::ASTVarDecl* node);

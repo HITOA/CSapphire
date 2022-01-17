@@ -33,9 +33,9 @@ std::u8string_view Tokenizer::Tokenizer::TokenizeWord(const std::u8string_view& 
 std::u8string_view Tokenizer::Tokenizer::TokenizeNumber(const std::u8string_view& str)
 {
 	int size = 0;
-	while (std::isdigit(str[size]) || str[size] == u8'.')
+	while (size < str.size() && (std::isdigit(str[size]) || str[size] == u8'.'))
 		size++;
-	if (str[0] == u8'.' || str[size] == u8'.')
+	if (size < str.size() && (str[0] == u8'.' || str[size] == u8'.'))
 		return str.substr(0, 0);
 
 	return str.substr(0, size);
@@ -55,7 +55,7 @@ std::pair<std::u8string_view, Tokenizer::TokenType> Tokenizer::Tokenizer::Tokeni
 
 	{ //Operator
 		std::u8string_view r = TryTokenizeWord(str, symbolsOperator); //Check for operator sign
-		if (r.length() == 1)
+		if (r.length() > 0)
 			return std::make_pair(r, TokenType::TOKEN_OPERATOR);
 	}
 

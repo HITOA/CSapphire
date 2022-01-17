@@ -171,6 +171,7 @@
     <ClInclude Include="ast\astnode.hpp" />
     <ClInclude Include="ast\asttype.hpp" />
     <ClInclude Include="ast\expression.hpp" />
+    <ClInclude Include="ast\expression\binaryop.hpp" />
     <ClInclude Include="ast\expression\literal.hpp" />
     <ClInclude Include="ast\program.hpp" />
     <ClInclude Include="ast\statement.hpp" />

@@ -173,9 +173,12 @@
     <ClInclude Include="ast\expression.hpp" />
     <ClInclude Include="ast\expression\binaryop.hpp" />
     <ClInclude Include="ast\expression\literal.hpp" />
+    <ClInclude Include="ast\expression\prototype.hpp" />
     <ClInclude Include="ast\program.hpp" />
     <ClInclude Include="ast\statement.hpp" />
     <ClInclude Include="ast\statementblock.hpp" />
+    <ClInclude Include="ast\statement\argdecl.h" />
+    <ClInclude Include="ast\statement\functiondecl.hpp" />
     <ClInclude Include="ast\statement\varasgn.hpp" />
     <ClInclude Include="ast\statement\vardecl.hpp" />
     <ClInclude Include="ast\statement\vardeclasgn.h" />

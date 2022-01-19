@@ -21,6 +21,10 @@ namespace Parser {
 			fullmsg += ", " + std::to_string(pos.second);
 			fullmsg += "> : ";
 			fullmsg += type._to_string();
+			fullmsg += "\n";
+			std::string tokenstr = (const char*)token.first.data();
+			tokenstr[token.first.size()] = 0x0;
+			fullmsg += tokenstr;
 		}
 		ParserException(ParserExceptionType type, Tokenizer::Tokenizer::Consumer::TokenType token, std::u8string_view src, std::string msg) : type{ type }, token{ token }
 		{
@@ -32,6 +36,10 @@ namespace Parser {
 			fullmsg += type._to_string();
 			fullmsg += ", ";
 			fullmsg += msg;
+			fullmsg += "\n";
+			std::string tokenstr = (const char*)token.first.data();
+			tokenstr[token.first.size()] = 0x0;
+			fullmsg += tokenstr;
 		}
 	public:
 		const char* what() const noexcept {

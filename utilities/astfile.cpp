@@ -88,6 +88,58 @@ void AstFile::ASTViewer::Visit_Literal(const AST::ASTLiteral* node)
 	rstack.push(r);
 }
 
+void AstFile::ASTViewer::Visit_Prototype(const AST::ASTPrototype* node)
+{
+	std::u8string r = u8"";
+	for (int i = node->GetArgNumber() - 1; i > -1; i--) {
+		node->GetArg(i).get()->Accept(this);
+	}
+	for (int i = 0; i < node->GetArgNumber(); i++) {
+		r += IndentStr(rstack.top());
+		rstack.pop();
+		r += u8"\n";
+	}
+	r += u8"\tbody: \n";
+	node->GetBody().get()->Accept(this);
+	r += IndentStr(IndentStr(rstack.top()));
+	rstack.pop();
+	r += u8"\n\ttype: ";
+	node->GetType().get()->Accept(this);
+	r += rstack.top();
+	rstack.pop();
+	rstack.push(r);
+}
+
+void AstFile::ASTViewer::Visit_ArgDecl(const AST::ASTArgDecl* node)
+{
+	std::u8string r = u8"ArgDecl: \n";
+	r += u8"\tidentifier: ";
+	r += node->GetIdentifier();
+	r += u8"\n\ttype: ";
+	node->GetType().get()->Accept(this);
+	r += rstack.top();
+	rstack.pop();
+	r += u8"\n\tdefault value: ";
+	if (node->HasDefaultValue()) {
+		node->GetDefaultValue().get()->Accept(this);
+		r += IndentStr(rstack.top());
+		rstack.pop();
+	}
+	rstack.push(r);
+}
+
+void AstFile::ASTViewer::Visit_FunctionDecl(const AST::ASTFunctionDecl* node)
+{
+	std::u8string r = u8"FunctionDecl: ";
+	r += u8"\n\tidentifier: ";
+	r += node->GetIdentifier();
+	r += u8"\n\tprototype: \n";
+	node->GetPrototype().get()->Accept(this);
+	r += IndentStr(rstack.top());
+	rstack.pop();
+	rstack.push(r);
+}
+
 void AstFile::ASTViewer::Visit_VarDecl(const AST::ASTVarDecl* node)
 {
 	std::u8string r = u8"VarDecl: \n";
@@ -120,6 +172,7 @@ void AstFile::ASTViewer::Visit_VarDeclAsgn(const AST::ASTVarDeclAsgn* node)
 	r += u8"\n\ttype: ";
 	node->GetType().get()->Accept(this);
 	r += rstack.top();
+	rstack.pop();
 	r += u8"\n\tvalue: ";
 	node->GetValue().get()->Accept(this);
 	r += IndentStr(IndentStr(rstack.top()));

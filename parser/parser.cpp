@@ -36,6 +36,7 @@ std::shared_ptr<AST::ASTStatement> Parser::Parser::ParseStatement()
 		if (int r = TryParseVarAsgn()) {
 			return ParseVarAsgn();
 		}
+		return ParseFunctionDecl();
 		break;
 	}
 	case Tokenizer::TokenType::TOKEN_PRIMITIVE_TYPE:
@@ -112,6 +113,21 @@ std::shared_ptr<AST::ASTExpression> Parser::Parser::ParsePrimaryExpr()
 	}
 }
 
+std::vector<std::shared_ptr<AST::ASTArgDecl>> Parser::Parser::ParseArgDeclList()
+{
+	std::vector<std::shared_ptr<AST::ASTArgDecl>> args{};
+
+	while (true) {
+		std::shared_ptr<AST::ASTArgDecl> arg = ParseArgDecl();
+		args.push_back(arg);
+		if (consumer.Peek().second._value != Tokenizer::TokenType::TOKEN_COMMA)
+			break;
+		consumer.Consume(); //Consumer comma
+	}
+
+	return args;
+}
+
 std::shared_ptr<AST::ASTPrimitive> Parser::Parser::ParsePrimitiveType()
 {
 	auto primitive = consumer.Consume();
@@ -173,6 +189,65 @@ std::shared_ptr<AST::ASTLiteral> Parser::Parser::ParseLiteral() //Incomplet
 	return std::shared_ptr<AST::ASTLiteral>{ new AST::ASTLiteral{ token.first, type } };
 }
 
+std::shared_ptr<AST::ASTPrototype> Parser::Parser::ParsePrototype()
+{
+	if (consumer.Peek().second._value != Tokenizer::TokenType::TOKEN_LPAR)
+		throw ParserException{ ParserExceptionType::BAD_TOKEN, consumer.Peek(), source };
+
+	consumer.Consume(); //Consume LPAR
+
+	std::vector<std::shared_ptr<AST::ASTArgDecl>> argsdecl{};
+
+	if (consumer.Peek().second._value != Tokenizer::TokenType::TOKEN_RPAR)
+		argsdecl = ParseArgDeclList();
+
+	if (consumer.Peek().second._value != Tokenizer::TokenType::TOKEN_RPAR)
+		throw ParserException{ ParserExceptionType::BAD_TOKEN, consumer.Peek(), source };
+
+	consumer.Consume(); //Consume RPAR
+
+	std::shared_ptr<AST::ASTType> type = ParseType();
+
+	ConsumeNewLine();
+
+	if (consumer.Peek().second._value != Tokenizer::TokenType::TOKEN_BLOCKSTART)
+		throw ParserException{ ParserExceptionType::BAD_TOKEN, consumer.Peek(), source, "'{' missing" };
+
+	consumer.Consume(); //Consume BLOCKSTART
+
+	std::shared_ptr<AST::ASTStatementBlock> body = ParseStatementBlock();
+
+	if (consumer.Peek().second._value != Tokenizer::TokenType::TOKEN_BLOCKEND)
+		throw ParserException{ ParserExceptionType::BAD_TOKEN, consumer.Peek(), source, "'}' missing" };
+
+	consumer.Consume(); //Consume BLOCKEND
+
+	return std::shared_ptr<AST::ASTPrototype>{new AST::ASTPrototype{ argsdecl, body, type }};
+}
+
+std::shared_ptr<AST::ASTArgDecl> Parser::Parser::ParseArgDecl()
+{
+	std::shared_ptr<AST::ASTType> type = ParseType();
+	if (consumer.Peek().second._value != Tokenizer::TokenType::TOKEN_WORD)
+		throw ParserException{ ParserExceptionType::BAD_TOKEN, consumer.Peek(), source, "identifier expected"};
+	std::u8string_view identifier = consumer.Consume().first;
+
+	if (consumer.Peek().first != u8"=")
+		return std::shared_ptr<AST::ASTArgDecl>{new AST::ASTArgDecl{ identifier, type }};
+
+	consumer.Consume(); //Consume assignement operator
+
+	std::shared_ptr<AST::ASTExpression> value = ParseExpression();
+	return std::shared_ptr<AST::ASTArgDecl>{new AST::ASTArgDecl{ identifier, type, value }};
+}
+
+std::shared_ptr<AST::ASTFunctionDecl> Parser::Parser::ParseFunctionDecl()
+{
+	std::u8string_view identifier = consumer.Consume().first;
+	std::shared_ptr<AST::ASTPrototype> prototype = ParsePrototype();
+	return std::shared_ptr<AST::ASTFunctionDecl>{new AST::ASTFunctionDecl{ identifier, prototype }};
+}
+
 std::shared_ptr<AST::ASTVarDecl> Parser::Parser::ParseVarDecl()
 {
 	std::shared_ptr<AST::ASTType> type = ParseType();
@@ -217,6 +292,12 @@ bool Parser::Parser::CanBeType(int i)
 	auto token = consumer.Peek(i);
 	return token.second._value == Tokenizer::TokenType::TOKEN_PRIMITIVE_TYPE
 		|| token.second._value == Tokenizer::TokenType::TOKEN_WORD;
+}
+
+void Parser::Parser::ConsumeNewLine()
+{
+	while (consumer.Peek().second._value == Tokenizer::TokenType::TOKEN_NEWLINE)
+		consumer.Consume();
 }
 
 int Parser::Parser::GetTokenPrecedence(int i, bool isBinary)

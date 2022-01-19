@@ -13,7 +13,10 @@ namespace AstFile {
 
 		void Visit_BinaryOp(const AST::ASTBinaryOp* node);
 		void Visit_Literal(const AST::ASTLiteral* node);
+		void Visit_Prototype(const AST::ASTPrototype* node);
 
+		void Visit_ArgDecl(const AST::ASTArgDecl* node);
+		void Visit_FunctionDecl(const AST::ASTFunctionDecl* node);
 		void Visit_VarDecl(const AST::ASTVarDecl* node);
 		void Visit_VarAsgn(const AST::ASTVarAsgn* node);
 		void Visit_VarDeclAsgn(const AST::ASTVarDeclAsgn* node);
